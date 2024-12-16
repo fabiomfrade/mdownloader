@@ -13,7 +13,7 @@ __license__ = "unlicensed"
 
 # Imports
 import random, curses, os, time
-# from pytube import YouTube
+from pytube import YouTube
 from youtubesearchpython import VideosSearch
 # Caracteres especiais
 characters = [127932, 127929, 9989, 11093]
@@ -35,7 +35,7 @@ while resp != 'sair':
         musica.append(resp)
 
     videosSearch = VideosSearch(resp, limit=2)
-    print(videosSearch.result())
-
-
-
+    resultado = dict(videosSearch.result())
+    # print(videosSearch.result())
+    for chave, valor in resultado.items():
+        print(f"{chave}, {valor}\n")
