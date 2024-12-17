@@ -29,7 +29,9 @@ download = ".download_links.tmp"
 print("{:^50}".format(f"Music Downloader - {__version__} - {chr(characters[random.randrange(0,2)])}"))
 
 # Funções
+# TODO: Criar funções main, de criação de lista e de download da list
 while True:
+    # TODO: Melhorar a validação de digitação e incluir outras opções, como download
     resp = input(f"Digite o nome da música a baixar; Digite 'sair' para encerrar: ")
     if resp.lower() == "sair" or resp == "":
         break
