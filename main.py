@@ -7,12 +7,14 @@ O script irá procurar o vídeo correspondente no YouTube e irá fazer o downloa
 
 Para o futuro, o usuário poderá escolher entre baixar somente o MP3, o vídeo ou ambos
 """
-__version__ = "0.1.0"
+__version__ = "0.1.3"
 __author__ = "Fábio Frade - fabiomfrade@gmail.com"
 __license__ = "unlicensed"
 
 # Imports
 import random, curses, os, time
+from os import write
+
 from pytube import YouTube
 from youtubesearchpython import VideosSearch
 # Caracteres especiais
@@ -21,7 +23,7 @@ characters = [127932, 127929, 9989, 11093]
 # Variáveis obrigatórias
 musica = []
 resp = ""
-
+download = ".download_links.tmp"
 
 # Inicio do Script
 print("{:^50}".format(f"Music Downloader - v_0.1.0 - {chr(characters[random.randrange(0,2)])}"))
@@ -39,5 +41,7 @@ while True:
             titulo = video["title"]
             url = video["link"]
             print(f"Titulo: {titulo}\nURL: {url}")
+            with open(download, "a") as arquivo:
+                arquivo.write(f"{url}\n")
         except:
             print("Nenhum Video encontrado")
