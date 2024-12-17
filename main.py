@@ -7,7 +7,7 @@ O script irá procurar o vídeo correspondente no YouTube e irá fazer o downloa
 
 Para o futuro, o usuário poderá escolher entre baixar somente o MP3, o vídeo ou ambos
 """
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __author__ = "Fábio Frade - fabiomfrade@gmail.com"
 __license__ = "unlicensed"
 
@@ -26,7 +26,7 @@ resp = ""
 download = ".download_links.tmp"
 
 # Inicio do Script
-print("{:^50}".format(f"Music Downloader - v_0.1.0 - {chr(characters[random.randrange(0,2)])}"))
+print("{:^50}".format(f"Music Downloader - {__version__} - {chr(characters[random.randrange(0,2)])}"))
 
 # Funções
 while True:
