@@ -27,15 +27,17 @@ resp = ""
 print("{:^50}".format(f"Music Downloader - v_0.1.0 - {chr(characters[random.randrange(0,2)])}"))
 
 # Funções
-while resp != 'sair':
-    print(f"Digite o nome da música a baixar; Digite 'sair' para encerrar: ")
-    resp = input()
-
-    if resp != 'sair':
-        musica.append(resp)
-
-    videosSearch = VideosSearch(resp, limit=2)
-    resultado = dict(videosSearch.result())
-    # print(videosSearch.result())
-    for chave, valor in resultado.items():
-        print(f"{chave}, {valor}\n")
+while True:
+    resp = input(f"Digite o nome da música a baixar; Digite 'sair' para encerrar: ")
+    if resp.lower() == "sair" or resp == "":
+        break
+    else:
+        busca = VideosSearch(resp, limit=1)
+        resultado = busca.result()
+        try:
+            video = resultado['result'][0]
+            titulo = video["title"]
+            url = video["link"]
+            print(f"Titulo: {titulo}\nURL: {url}")
+        except:
+            print("Nenhum Video encontrado")
