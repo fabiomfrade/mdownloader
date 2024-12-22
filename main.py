@@ -7,21 +7,20 @@ O script irá procurar o vídeo correspondente no YouTube e irá fazer o downloa
 
 Para o futuro, o usuário poderá escolher entre baixar somente o MP3, o vídeo ou ambos
 """
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 __author__ = "Fábio Frade - fabiomfrade@gmail.com"
 __license__ = "unlicensed"
 
 # Imports
 import random, curses, os, time
+import sys
 from os import write
-
-from pytube import YouTube
+import yt_dlp
 from youtubesearchpython import VideosSearch
 # Caracteres especiais
 characters = [127932, 127929, 9989, 11093]
 
 # Variáveis obrigatórias
-musica = []
 resp = ""
 download = ".download_links.tmp"
 
@@ -39,11 +38,18 @@ while True:
         busca = VideosSearch(resp, limit=1)
         resultado = busca.result()
         try:
+            # Obtendo valores do vídeo encontrado
             video = resultado['result'][0]
             titulo = video["title"]
             url = video["link"]
             print(f"Titulo: {titulo}\nURL: {url}")
+            # Armazenando URL em arquivo temporário
             with open(download, "a") as arquivo:
                 arquivo.write(f"{url}\n")
+            # Baixando o MP3
+            with yt_dlp.YoutubeDL({'extract_audio': True, 'format': 'bestaudio', 'outtmpl': '%(title)s.mp3'}) as audio:
+                info_dict = audio.extract_info(url, download = True)
+                video_title = info_dict['title']
         except:
             print("Nenhum Video encontrado")
+            sys.exit(1)
