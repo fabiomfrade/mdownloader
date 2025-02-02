@@ -2,6 +2,15 @@
 
 Music Downloader é um script em Python para buscar, baixar e organizar músicas e vídeos diretamente do YouTube.
 
+## Objetivo
+
+O objetivo deste projeto é permitir o download de músicas extraídas de vídeos do YouTube e permitir que o usuário 
+decida entre baixar vídeos ou apenas o áudio.
+
+## Propósito
+
+O propósito deste projeto é meramente educacional. Enquanto aprimoro conhecimentos da linguagem Python, vou melhorando o código criado aqui e mantendo as versões anteriores em histórico de commits e/ou tags do projeto.
+
 ## Recursos
 
 - Buscar e baixar músicas individualmente.
@@ -40,7 +49,7 @@ sudo apt-get install ffmpeg
 Para iniciar o script, basta rodar o comando:
 
 ```bash
-python3 music_downloader.py
+python3 main.py
 ```
 
 ### Menu de Opções
