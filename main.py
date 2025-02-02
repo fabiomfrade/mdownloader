@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __author__ = "Fábio Frade - fabiomfrade@gmail.com"
 __license__ = "unlicensed"
 
@@ -52,16 +52,30 @@ def baixar_audio(url):
     with yt_dlp.YoutubeDL({
         'extract_audio': True,
         'format': 'bestaudio',
-        'outtmpl': '%(title)s.mp3',
+        'outtmpl': 'mp3/%(title)s.mp3',
         'quiet': True
     }) as audio:
         info_dict = audio.extract_info(url, download = True)
         video_title = info_dict['title']
         print("MP3 baixado com sucesso\n")
 
-# To-DO: Criar a função para baixar o vídeo ao invés do áudio apenas
 def baixar_video():
-    return None
+    ydl_opts = {
+        'format': 'bestvideo+bestaudio/best',
+        'outtmpl': 'videos/%(title)s.%(ext)s',
+        'merge_output_format': 'mp4',
+        'quiet': True
+    }
+    mp4 = input("Digite o nome do vídeo que deseja baixar: ")
+    buscar = VideosSearch(mp4, limit=1)
+    resultado = buscar.result()
+    video = resultado['result'][0]
+    titulo = video['title']
+    url = video['link']
+
+    print(f"Vídeo {titulo}, aguarde enquanto o download se inicia")
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
 
 def baixar_lista():
     lista = input("Digite o nome do arquivo: ")
