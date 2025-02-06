@@ -33,7 +33,7 @@ Certifique-se de ter instalado:
 Para instalar as dependências Python, execute:
 
 ```bash
-pip install yt-dlp prompt_toolkit youtube-search-python ffmpeg
+pip install -f requirements.txt
 ```
 
 Para instalar o pacote `ffmpeg` em distribuições baseadas em Debian:
