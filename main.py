@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
 
-__version__ = "0.2.2"
+__version__ = "0.2.5"
 __author__ = "Fábio Frade - fabiomfrade@gmail.com"
 __license__ = "unlicensed"
 
 # Imports
-# import random, curses, os, time
 import random
 import os
-import sys
-from os import write
-from time import sleep
-
-import yt_dlp
 from prompt_toolkit.shortcuts import clear
+import yt_dlp
 from youtubesearchpython import VideosSearch
 
 # Caracteres especiais
@@ -48,49 +43,60 @@ def cria_lista(url):
         arquivo.write(f"{url}\n")
         return None
 
-def baixar_audio(url):
+def baixar_audio(url=None):
+    link = input("Digite a URL a baixar: ") if not url else url
     with yt_dlp.YoutubeDL({
         'extract_audio': True,
         'format': 'bestaudio',
         'outtmpl': 'mp3/%(title)s.mp3',
         'quiet': True
     }) as audio:
-        info_dict = audio.extract_info(url, download = True)
+        info_dict = audio.extract_info(link, download = True)
         video_title = info_dict['title']
         print("MP3 baixado com sucesso\n")
 
-def baixar_video():
-    ydl_opts = {
-        'format': 'bestvideo+bestaudio/best',
-        'outtmpl': 'videos/%(title)s.%(ext)s',
-        'merge_output_format': 'mp4',
-        'quiet': True
-    }
+def busca_video():
     mp4 = input("Digite o nome do vídeo que deseja baixar: ")
     buscar = VideosSearch(mp4, limit=1)
     resultado = buscar.result()
     video = resultado['result'][0]
     titulo = video['title']
     url = video['link']
+    print(f"Vídeo {titulo} encontrado, iniciando download")
+    baixa_video(url)
 
-    print(f"Vídeo {titulo}, aguarde enquanto o download se inicia")
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([url])
-
-def baixar_lista():
+def baixar_lista(lista_video=False):
     lista = input("Digite o nome do arquivo: ")
     with open(lista, "r") as download_lista:
         for linha in download_lista.readlines():
             if linha[0:5].lower() == "https":
                 print("URL encontrada, iniciando download")
-                baixar_audio(linha)
+                if not lista_video:
+                    baixar_audio(linha)
+                else:
+                    baixa_video(linha)
             else:
-                print("Detectado o nome de uma música, iniciando a busca...")
+                print("Detectado o nome do vídeo, iniciando a busca...")
                 encontra = VideosSearch(linha, limit=1)
                 resultado = encontra.result()
                 video = resultado['result'][0]
                 url = video['link']
-                baixar_audio(url)
+                if not lista_video:
+                    baixar_audio(url)
+                else:
+                    baixa_video(url)
+
+def baixa_video(url):
+    with yt_dlp.YoutubeDL({
+        'format': 'bestvideo+bestaudio/best',
+        # 'outtmpl': f'videos/{titulo}.mp4',
+        'outtmpl': 'videos/%(title)s.%(ext)s',
+        'merge_output_format': 'mp4',
+        'quiet': True
+    }) as video_downloader:
+        video_downloader.download([url])
+
+    print("Vídeo baixado com sucesso!\n")
 
 
 # Dicionário de funções
@@ -98,8 +104,9 @@ opcoes = {
     "1": ("Baixar música", buscar_musica),
     "2": ("Criar e baixar uma lista", lambda: buscar_musica(salva_arquivo=True)),
     "3": ("Baixar MP3 de um Link direto", baixar_audio),
-    "4": ("Baixar vídeo", baixar_video),
+    "4": ("Baixar vídeo", busca_video),
     "5": ("Baixar lista MP3 de um arquivo existente", baixar_lista),
+    "6": ("Baixar Vídeos de uma lista salva\n", lambda: baixar_lista(lista_video=True))
 }
 
 def menu():
